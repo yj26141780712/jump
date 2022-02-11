@@ -4,6 +4,8 @@ import { Board } from './board';
 import { Constants } from './Constants';
 const { ccclass, property } = _decorator;
 
+// https://forum.cocos.org/t/3d/86001 wangzhi
+
 /**
  * Predefined variables
  * Name = board_manager
