@@ -11,6 +11,12 @@ enum BOARD_TYPE {
 
 export class Constants {
 
+    // ball 
+
+    // camera
+    static CAMERA_INIT_POS = new Vec3(0, 15, 22); //相机初始位置
+    static CAMERA_INIT_ROT = new Vec3(-11, 0, 0);//相机初始旋转
+
     // board
     static BOARD_INIT_POS = new Vec3(0, 10, 0);
     static BOARD_NUM = 6;
