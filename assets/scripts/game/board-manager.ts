@@ -54,6 +54,7 @@ export class BoardManager extends Component {
             const board = this.boardList[i];
             board.reset(Constants.BOARD_TYPE.NORMAL, pos);
             pos = this.getNextPos(board);
+            console.log(pos);
         }
     }
 

@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Vec3 } from 'cc';
 const { ccclass, property } = _decorator;
 
 /**
@@ -16,20 +16,20 @@ const { ccclass, property } = _decorator;
 
 @ccclass('camre')
 export class Camera extends Component {
-    // [1]
-    // dummy = '';
 
-    // [2]
-    // @property
-    // serializableDummy = 0;
+    @property(Node)
+    public planeNode: Node = null;
+
+    currentPos = new Vec3();
+    originPos = new Vec3();
 
     start() {
-        // [3]
+        this.originPos = 
     }
 
-    // update (deltaTime: number) {
-    //     // [4]
-    // }
+    update(deltaTime: number) {
+
+    }
 }
 
 /**

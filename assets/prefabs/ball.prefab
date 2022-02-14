@@ -61,7 +61,7 @@
   {
     "__type__": "cc.Node",
     "_name": "RootNode",
-    "_objFlags": 0,
+    "_objFlags": 512,
     "_parent": {
       "__id__": 1
     },
@@ -233,7 +233,7 @@
   },
   {
     "__type__": "cc.CompPrefabInfo",
-    "fileId": "36+HOajgJF3abMlFayqNVV"
+    "fileId": "231JUV0WVNwbJVm6HIgRma"
   },
   {
     "__type__": "cc.PrefabInfo",

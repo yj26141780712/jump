@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, instantiate, EventTouch } from 'cc';
+import { _decorator, Component, Node, Prefab, instantiate, EventTouch, Camera } from 'cc';
 import { Ball } from './ball';
 import { BoardManager } from './board-manager';
 import { Constants } from './constants';
@@ -23,9 +23,11 @@ export class Game extends Component {
     @property(Prefab)
     public ballPrefab: Prefab = null;
 
-    // @property(BoardManager)
-    // public boardManager: BoardManager = null;
+    @property(BoardManager)
+    public boardManager: BoardManager = null;
 
+    @property(Camera)
+    public Camera: Camera = null;
 
     currentJumpFre = 0; //当前跳跃频率;
     state = Constants.GAME_STATE.READY;
@@ -40,7 +42,9 @@ export class Game extends Component {
         this.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this);
         this.node.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
         this.node.on(Node.EventType.TOUCH_END, this.onTouchEnd, this);
-        this.startGame();
+        this.scheduleOnce(() => {
+            this.startGame();
+        }, 3)
     }
 
     onTouchStart(event: EventTouch) {
