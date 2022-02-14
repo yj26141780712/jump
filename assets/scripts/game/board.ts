@@ -36,16 +36,28 @@ export class Board extends Component {
     springHelixPrefab: Prefab = null!;
 
     type = Constants.BOARD_TYPE.NORMAL;
+    originScale = new Vec3();
 
     start() {
+        this.originScale.set(this.node.getScale());
         // [3]
     }
 
+    /**
+     * 重置跳板
+     * @param type 跳板类型
+     * @param pos 跳板位置
+     */
     reset(type: number, pos: Vec3) {
         this.node.setPosition(pos);
         this.type = type;
-        if (type = Constants.BOARD_TYPE.NORMAL) {
-
+        //设置跳板大小
+        if (type === Constants.BOARD_TYPE.GIANT) {
+            this.node.setScale(this.originScale.x * Constants.BOARD_SCALE_GIANT, this.originScale.y, this.originScale.z);
+        } else if (type === Constants.BOARD_TYPE.DROP) {
+            this.node.setScale(this.originScale.x, this.originScale.y * Constants.BOARD_HEIGTH_SCALE_DROP, this.originScale.z);
+        } else {
+            this.node.setScale(this.originScale);
         }
     }
     // update (deltaTime: number) {

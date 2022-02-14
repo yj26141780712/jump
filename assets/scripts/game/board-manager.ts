@@ -59,6 +59,7 @@ export class BoardManager extends Component {
 
     getNextPos(board: Board) {
         const pos = board.node.getPosition().clone();
+        pos.x = Constants.SCENE_MAX_OFFSET_X * (Math.random() - 0.5);
         if (board.type === Constants.BOARD_TYPE.SPRING) {
             pos.y += Constants.BOARD_GAP_SPRING;
         } else if (board.type === Constants.BOARD_TYPE.SPRINT) {

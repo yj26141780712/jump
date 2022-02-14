@@ -59,8 +59,8 @@
         "mipfilter": "none",
         "premultiplyAlpha": false,
         "anisotropy": 0,
-        "isUuid": true,
-        "imageUuidOrDatabaseUri": "80bf90f7-8567-4e82-8820-df7470d17e85@df7df"
+        "isUuid": false,
+        "imageUuidOrDatabaseUri": "db://assets/textures/home/homeBG.jpg"
       }
     },
     "9d093": {
@@ -119,6 +119,7 @@
     "imageMetas": [
       {
         "name": "贴图 #1",
+        "remap": "db://assets/textures/home/homeBG.jpg",
         "uri": "80bf90f7-8567-4e82-8820-df7470d17e85@df7df"
       }
     ],
