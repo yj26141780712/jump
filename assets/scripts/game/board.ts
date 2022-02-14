@@ -1,6 +1,6 @@
 
 import { _decorator, Component, Node, Prefab, Vec3 } from 'cc';
-import { Constants } from './Constants';
+import { Constants } from './constants';
 const { ccclass, property } = _decorator;
 
 /**
@@ -38,9 +38,8 @@ export class Board extends Component {
     type = Constants.BOARD_TYPE.NORMAL;
     originScale = new Vec3();
 
-    start() {
-        this.originScale.set(this.node.getScale());
-        // [3]
+    onLoad() {
+        this.originScale.set(this.node.scale);
     }
 
     /**
@@ -60,6 +59,15 @@ export class Board extends Component {
             this.node.setScale(this.originScale);
         }
     }
+
+    getHeight() {
+        return this.type === Constants.BOARD_TYPE.DROP ? Constants.BOARD_HEIGTH / 2 : Constants.BOARD_HEIGTH;
+    }
+
+    getRadius() {
+        return this.type === Constants.BOARD_TYPE.GIANT ? Constants.BOARD_SCALE_GIANT * Constants.BOARD_RADIUS : Constants.BOARD_RADIUS;
+    }
+
     // update (deltaTime: number) {
     //     // [4]
     // }

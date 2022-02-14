@@ -1,7 +1,7 @@
 
 import { _decorator, Component, Node, Prefab, instantiate, Vec3, setDisplayStats } from 'cc';
 import { Board } from './board';
-import { Constants } from './Constants';
+import { Constants } from './constants';
 const { ccclass, property } = _decorator;
 
 // https://forum.cocos.org/t/3d/86001 wangzhi
