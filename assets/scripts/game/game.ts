@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, instantiate, EventTouch } from 'cc';
+import { _decorator, Component, Node, Prefab, instantiate, EventTouch, game } from 'cc';
 import { Ball } from './ball';
 import { BoardManager } from './board-manager';
 import { Constants } from './constants';
@@ -40,20 +40,18 @@ export class Game extends Component {
     isTouch = false;
     touchPosX = 0;
     movePosX = 0;
+    ball: Ball;
 
     start() {
         //初始化小球
         const ballNode = instantiate(this.ballPrefab);
-        const ball = ballNode.getComponent(Ball);
-        ball.game = this;
+        this.ball = ballNode.getComponent(Ball);
+        this.ball.game = this;
         this.node.parent.addChild(ballNode);
         //监听事件
         this.node.on(Node.EventType.TOUCH_START, this.onTouchStart, this);
         this.node.on(Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
         this.node.on(Node.EventType.TOUCH_END, this.onTouchEnd, this);
-        this.scheduleOnce(() => {
-            this.startGame();
-        }, 3)
     }
 
     onDestroy() {
@@ -75,12 +73,21 @@ export class Game extends Component {
         this.isTouch = false;
     }
 
+    reset() {
+        this.ball.reset();
+    }
+
     startGame() {
         this.state = Constants.GAME_STATE.PLAYING;
+        this.uiManager.hide();
     }
 
     endGame() {
-
+        this.state = Constants.GAME_STATE.OVER;
+        this.reset();
+        this.boardManager.reset();
+        this.Camera.reset();
+        this.uiManager.show();
     }
 
     // update (deltaTime: number) {

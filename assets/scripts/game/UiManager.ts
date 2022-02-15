@@ -1,5 +1,6 @@
 
 import { _decorator, Component, Node } from 'cc';
+import { Game } from './game';
 const { ccclass, property } = _decorator;
 
 /**
@@ -23,13 +24,24 @@ export class UiManager extends Component {
     @property(Node)
     public pageResult: Node = null;
 
+    @property(Game)
+    public game: Game = null;
+
     start() {
         // [3]
     }
 
-    // update (deltaTime: number) {
-    //     // [4]
-    // }
+    startGame() {
+        this.game.startGame();
+    }
+
+    show() {
+        this.pageStart.active = true;
+    }
+
+    hide() {
+        this.pageStart.active = false;
+    }
 }
 
 /**

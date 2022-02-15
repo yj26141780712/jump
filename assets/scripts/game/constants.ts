@@ -61,6 +61,12 @@ enum GAME_STATE {
 export class Constants {
 
     static COEFF_POS_BALL = 8 / 360;
+    static PLAYER_MAX_DOWN_FRAMES = 40; // 最大下落帧数
+    static SCENE_MAX_OFFSET_X = 3.5; // 小球最大横向移动距离
+
+    // score
+    static SCORE_BOARD_CENTER = 2; // 小球靠近跳板圆心的分数
+    static SCORE_BOARD_NOT_CENTER = 1; // 小球跳入非跳板圆心的分数
 
     // ball 
     static BALL_RADIUS = 0.5; // 球体半径
@@ -97,11 +103,20 @@ export class Constants {
     static BOARD_HEIGTH_SCALE_DROP = 0.5; // 掉落板厚度缩放比例
     static BOARD_SCALE_GIANT = 2.8;  // 大跳板缩放比例
     static BOARD_TYPE = BOARD_TYPE;
-    static SCENE_MAX_OFFSET_X = 3.5; // 小球最大横向移动距离
+    static BOARD_RADIUS_CENTER = 0.35; // 跳板圆心半径，小球根据距离圆心远近增加不同分数
+    static BOARD_WAVE_FRAMES = 16; // 板子波动帧率
+    static BOARD_WAVE_INNER_START_FRAMES = 8;
+    static BOARD_WAVE_INNER_STEP = 0.12 * 2;
+    static BOARD_WAVE_STEP = 0.15 * 15;
 
+    static SPRING_HEIGHT = 0.2;
+    static SPRING_HELIX_STEP = 0.5;
+    static SPRING_HELIX_STEP_SPIRNT = 1.2;
+    static SPRING_TOP_STEP = 0.25;
+    static SPRING_TOP_STEP_SPRINT = 0.5;
+    static WAVE_OFFSET_Y = 0.13 / 2;
     //game
     static GAME_STATE = GAME_STATE;
-    static BALL_JUMP_STATE = JUMP_STATE; // 小球跳跃状态枚举
 
     static normalDt = 1 / 60;
 }

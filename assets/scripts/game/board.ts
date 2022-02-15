@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Prefab, Vec3 } from 'cc';
+import { _decorator, Component, Node, Prefab, Vec3, instantiate, MeshRenderer, Color } from 'cc';
 import { Constants } from './constants';
 const { ccclass, property } = _decorator;
 
@@ -39,8 +39,14 @@ export class Board extends Component {
     originScale = new Vec3();
     isActive = false;
 
+    waveNode: Node;
+    innerWaveNode: Node;
+    currWaveFrame: number;
+    waveOriginScale = new Vec3();
+
     onLoad() {
         this.originScale.set(this.node.scale);
+        this.initWave();
     }
 
     /**
@@ -70,9 +76,66 @@ export class Board extends Component {
         return this.type === Constants.BOARD_TYPE.GIANT ? Constants.BOARD_SCALE_GIANT * Constants.BOARD_RADIUS : Constants.BOARD_RADIUS;
     }
 
-    // update (deltaTime: number) {
-    //     // [4]
-    // }
+    initWave() {
+        this.waveNode = instantiate(this.wavePrefab);
+        this.waveNode.active = false;
+        this.node.parent.addChild(this.waveNode);
+        this.innerWaveNode = instantiate(this.wavePrefab);
+        this.innerWaveNode.active = false;
+        this.node.parent.addChild(this.innerWaveNode);
+        this.waveOriginScale.set(this.waveNode.getScale());
+    }
+
+    setWave() {
+        console.log('设置波动');
+        this.currWaveFrame = 0;
+        const pos = this.node.getPosition().clone();
+        pos.y += Constants.WAVE_OFFSET_Y;
+
+        this.waveNode.setPosition(pos);
+        this.waveNode.setScale(this.waveOriginScale.clone());
+        this.waveNode.active = true;
+
+        this.innerWaveNode.setPosition(pos);
+        this.innerWaveNode.setScale(this.waveOriginScale.clone());
+        this.innerWaveNode.active = true;
+    }
+
+    effectWave() {
+        if (this.currWaveFrame < Constants.BOARD_WAVE_FRAMES) {
+            if (this.currWaveFrame >= Constants.BOARD_WAVE_INNER_START_FRAMES) {
+                if (!this.innerWaveNode.active) {
+                    this.innerWaveNode.active = true;
+                }
+                const mat2 = this.innerWaveNode.getComponent(MeshRenderer).material;
+                // 初始化时保存以下变量
+                const pass = mat2!.passes[0];
+                const hColor = pass.getHandle('color');
+                const color = new Color('#dadada');
+                color.a = 127 - Math.sin(this.currWaveFrame * 0.05) * 127;
+                pass.setUniform(hColor, color);
+                const scale = this.innerWaveNode.getScale();
+                this.innerWaveNode.setScale(scale.x + Constants.BOARD_WAVE_INNER_STEP, scale.y, scale.z + Constants.BOARD_WAVE_INNER_STEP);
+            }
+            const mat2 = this.waveNode.getComponent(MeshRenderer)!.material;
+            // 初始化时保存以下变量
+            const pass = mat2!.passes[0];
+            const hColor = pass.getHandle('color');
+            const color = new Color('#dadada');
+            color.a = 127 - Math.sin(this.currWaveFrame * 0.1) * 127;
+            pass.setUniform(hColor, color);
+            const scale = this.innerWaveNode.getScale();;
+            this.waveNode.setScale(scale.add(new Vec3(Constants.BOARD_WAVE_STEP, 0, Constants.BOARD_WAVE_STEP)));
+            this.currWaveFrame++;
+        } else {
+            this.waveNode.active = false;
+            this.innerWaveNode.active = false;
+        }
+    }
+
+    update(deltaTime: number) {
+        this.effectWave();
+    }
 }
 
 /**

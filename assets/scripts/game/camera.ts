@@ -45,6 +45,11 @@ export class Camera extends Component {
         this.planeNode.setPosition(position.x, y, -100);
     }
 
+    reset() {
+        this.originPos.set(Constants.CAMERA_INIT_POS);
+        this.setBgPosition(this.originPos);
+    }
+
     update(deltaTime: number) {
         this.currentPos.set(this.node.getPosition());
         if (this.originPos.x === this.currentPos.x && this.originPos.y === this.currentPos.y) {

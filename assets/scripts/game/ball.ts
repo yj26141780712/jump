@@ -3,6 +3,8 @@ import { _decorator, Component, Node, Vec3 } from 'cc';
 import { Board } from './board';
 import { Constants } from './constants';
 import { Game } from './game';
+import { utils } from './utils';
+
 const { ccclass, property } = _decorator;
 
 /**
@@ -30,7 +32,9 @@ export class Ball extends Component {
     // 是否处于弹簧跳状态
     isJumpSpring = false;
     currJumpFrame = 0;
-
+    diffLevel = 0;
+    boardGroupCount = 0;
+    hasSprint = false;
 
     start() {
         // [3]
@@ -44,6 +48,8 @@ export class Ball extends Component {
         this.node.setPosition(this.currentPos);
         this.jumpState = Constants.BALL_JUMP_STATE.FALLDOWN;
         this.currJumpFrame = 0;
+        this.currentIndex = 0;
+        this.currentBoard = this.game.boardManager.boardList[0];
         this.node.active = true;
     }
 
@@ -51,9 +57,14 @@ export class Ball extends Component {
         // [4]
         this.timeScale = Math.floor((deltaTime / Constants.normalDt) * 100) / 100;
         if (this.game.state === Constants.GAME_STATE.PLAYING) {
+            const pos = this.node.getPosition();
             const boardList = this.game.boardManager.boardList;
             this.currJumpFrame += this.timeScale;
             if (this.jumpState === Constants.BALL_JUMP_STATE.FALLDOWN) { // 往下掉
+                if (this.currJumpFrame > Constants.PLAYER_MAX_DOWN_FRAMES || (this.currentBoard.node.position.y - pos.y) - (Constants.BOARD_GAP + Constants.BOARD_HEIGTH) > 0.001) {
+                    this.game.endGame();
+                    return;
+                }
                 for (let i = this.currentIndex + 1; i >= 0; i--) {
                     const board = boardList[i];
                     if (this.isOnBoard(board)) {
@@ -64,7 +75,12 @@ export class Ball extends Component {
                     }
                 }
             } else if (this.jumpState === Constants.BALL_JUMP_STATE.SPRINT) { // 冲刺
-
+                if (this.currJumpFrame >= Constants.BALL_JUMP_FRAMES_SPRING) { // 冲刺状态结束
+                    this.jumpState = Constants.BALL_JUMP_STATE.JUMPUP;
+                    this.isJumpSpring = false;
+                    this.currJumpFrame = 0;
+                    this.hasSprint = false;
+                }
             } else if (this.jumpState === Constants.BALL_JUMP_STATE.JUMPUP) { // 正常跳跃
                 if (this.isJumpSpring && this.currJumpFrame >= Constants.BALL_JUMP_FRAMES_SPRING) {
                     // 处于跳跃状态并且当前跳跃高度超过弹簧板跳跃高度
@@ -78,8 +94,8 @@ export class Ball extends Component {
                     }
                 }
             }
-            this.setPosX();
             this.setPosY();
+            this.setPosX();
             this.game.touchPosX = this.game.movePosX;
         }
     }
@@ -116,24 +132,55 @@ export class Ball extends Component {
         // const y = boardPos.y + Constants.BALL_RADIUS + this.currentBoard.getHeight() / 2 - .01;
         this.node.setPosition(pos.x, pos.y, pos.z);
         this.currJumpFrame = 0;
-        if (type === Constants.BOARD_TYPE.SPRING) {
-
-        } else if (type === Constants.BOARD_TYPE.SPRINT) {
+        if (type === Constants.BOARD_TYPE.SPRINT) {
             this.jumpState = Constants.BALL_JUMP_STATE.SPRINT;
         } else {
             this.jumpState = Constants.BALL_JUMP_STATE.JUMPUP;
         }
-
-        if (!this.currentBoard.isActive) {
+        if (!this.currentBoard.isActive) { // 跳板激活 获得分数 增加难度
             this.currentBoard.isActive = true;
-            console.log(this.currentIndex - Constants.BOARD_NEW_INDEX);
+            let score = Constants.SCORE_BOARD_NOT_CENTER;
+            if (Math.abs(pos.x - boardPos.x) <= Constants.BOARD_RADIUS_CENTER) {
+                score = Constants.SCORE_BOARD_CENTER;
+            }
+            this.diffLevel += Math.floor(score / 2);
             for (let l = this.currentIndex - Constants.BOARD_NEW_INDEX; l > 0; l--) {
-                this.game.boardManager.newBoard(type);
+                this.setNewBoard();
             }
         }
-
+        this.currentBoard.setWave();
         this.game.Camera.setOriginPosX(pos.x);
         this.game.Camera.setOriginPosY(boardPos.y + Constants.CAMERA_OFFSET_Y);
+    }
+
+    setNewBoard() {
+        let type = Constants.BOARD_TYPE.NORMAL;
+        const coeff = utils.getDiffCoeff(this.diffLevel, 1, 10);
+        if (this.boardGroupCount <= 0) {
+            const t = Math.random() * coeff;
+            if (t < 4.2) {
+                type = Constants.BOARD_TYPE.NORMAL;
+            } else if (t <= 5.5) {
+                type = Constants.BOARD_TYPE.GIANT;
+                this.boardGroupCount = 3;
+            } else if (t <= 6.2) {
+                type = Constants.BOARD_TYPE.SPRING;
+                if (Math.random() > 0.5) {
+                    this.boardGroupCount = 2;
+                }
+            } else if (t <= 7) {
+                type = Constants.BOARD_TYPE.DROP;
+                this.boardGroupCount = 3
+            } else if (t <= 7.5 && this.hasSprint === false) {
+                type = Constants.BOARD_TYPE.SPRINT;
+                this.hasSprint = true;
+                this.boardGroupCount = 3
+            } else {
+                type = Constants.BOARD_TYPE.NORMAL;
+            }
+        }
+        this.boardGroupCount--;
+        this.game.boardManager.newBoard(type);
     }
 
     setPosX() {
