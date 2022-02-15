@@ -54,7 +54,6 @@ export class BoardManager extends Component {
             const board = this.boardList[i];
             board.reset(Constants.BOARD_TYPE.NORMAL, pos);
             pos = this.getNextPos(board);
-            console.log(pos);
         }
     }
 
@@ -69,6 +68,14 @@ export class BoardManager extends Component {
             pos.y += Constants.BOARD_GAP;
         }
         return pos;
+    }
+
+    newBoard(type: number) {
+        const lastBoard = this.boardList[Constants.BOARD_NUM - 1];
+        const newBoard = this.boardList.shift()!;
+        const newPos = this.getNextPos(lastBoard);
+        newBoard.reset(type, newPos);
+        this.boardList.push(newBoard);
     }
 
     // update (deltaTime: number) {

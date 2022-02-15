@@ -1,8 +1,10 @@
 
-import { _decorator, Component, Node, Prefab, instantiate, EventTouch, Camera } from 'cc';
+import { _decorator, Component, Node, Prefab, instantiate, EventTouch } from 'cc';
 import { Ball } from './ball';
 import { BoardManager } from './board-manager';
 import { Constants } from './constants';
+import { Camera } from './camera';
+import { UiManager } from './UiManager';
 const { ccclass, property } = _decorator;
 
 /**
@@ -29,8 +31,15 @@ export class Game extends Component {
     @property(Camera)
     public Camera: Camera = null;
 
+    @property(UiManager)
+    public uiManager: UiManager = null;
+
     currentJumpFre = 0; //当前跳跃频率;
     state = Constants.GAME_STATE.READY;
+
+    isTouch = false;
+    touchPosX = 0;
+    movePosX = 0;
 
     start() {
         //初始化小球
@@ -47,16 +56,23 @@ export class Game extends Component {
         }, 3)
     }
 
-    onTouchStart(event: EventTouch) {
+    onDestroy() {
+        this.node.off(Node.EventType.TOUCH_START, this.onTouchStart, this);
+        this.node.off(Node.EventType.TOUCH_MOVE, this.onTouchMove, this);
+        this.node.off(Node.EventType.TOUCH_END, this.onTouchEnd, this);
+    }
 
+    onTouchStart(event: EventTouch) {
+        this.isTouch = true;
+        this.touchPosX = this.movePosX = event.getLocation().x;
     }
 
     onTouchMove(event: EventTouch) {
-
+        this.movePosX = event.getLocation().x;
     }
 
     onTouchEnd(event: EventTouch) {
-
+        this.isTouch = false;
     }
 
     startGame() {

@@ -31,6 +31,7 @@ export class Ball extends Component {
     isJumpSpring = false;
     currJumpFrame = 0;
 
+
     start() {
         // [3]
         this.reset();
@@ -79,6 +80,7 @@ export class Ball extends Component {
             }
             this.setPosX();
             this.setPosY();
+            this.game.touchPosX = this.game.movePosX;
         }
     }
 
@@ -121,10 +123,24 @@ export class Ball extends Component {
         } else {
             this.jumpState = Constants.BALL_JUMP_STATE.JUMPUP;
         }
+
+        if (!this.currentBoard.isActive) {
+            this.currentBoard.isActive = true;
+            console.log(this.currentIndex - Constants.BOARD_NEW_INDEX);
+            for (let l = this.currentIndex - Constants.BOARD_NEW_INDEX; l > 0; l--) {
+                this.game.boardManager.newBoard(type);
+            }
+        }
+
+        this.game.Camera.setOriginPosX(pos.x);
+        this.game.Camera.setOriginPosY(boardPos.y + Constants.CAMERA_OFFSET_Y);
     }
 
     setPosX() {
-
+        if (this.game.isTouch && this.game.touchPosX !== this.game.movePosX) {
+            const x = (this.game.movePosX - this.game.touchPosX) * Constants.COEFF_POS_BALL;
+            this.node.setPosition(this.currentPos.x + x, this.currentPos.y, this.currentPos.z);
+        }
     }
 
     setPosY() {
@@ -135,7 +151,6 @@ export class Ball extends Component {
             } else {
                 this.currentPos.y += Constants.BALL_JUMP_STEP[Math.floor(this.currJumpFrame / 2)] * this.timeScale;
             }
-            console.log(this.currentPos);
             this.node.setPosition(this.currentPos);
         } else if (this.jumpState === Constants.BALL_JUMP_STATE.FALLDOWN) {
             if (this.currentBoard.type === Constants.BOARD_TYPE.SPRING) {
@@ -151,7 +166,6 @@ export class Ball extends Component {
             } else {
                 this.currentPos.y -= Constants.BALL_JUMP_STEP[0] * this.timeScale;
             }
-            console.log(this.currentPos);
             this.node.setPosition(this.currentPos);
         } else if (this.jumpState === Constants.BALL_JUMP_STATE.SPRINT) {
 

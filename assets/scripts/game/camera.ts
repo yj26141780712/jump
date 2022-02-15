@@ -1,5 +1,6 @@
 
 import { _decorator, Component, Node, Vec3 } from 'cc';
+import { Constants } from './constants';
 const { ccclass, property } = _decorator;
 
 /**
@@ -14,7 +15,7 @@ const { ccclass, property } = _decorator;
  *
  */
 
-@ccclass('camre')
+@ccclass('camera')
 export class Camera extends Component {
 
     @property(Node)
@@ -24,11 +25,48 @@ export class Camera extends Component {
     originPos = new Vec3();
 
     start() {
-        this.originPos = 
+        this.originPos.set(Constants.CAMERA_INIT_POS);
+        this.setBgPosition(this.originPos);
+        this.node.eulerAngles = Constants.CAMERA_INIT_ROT;
+    }
+
+    setOriginPosX(val: number) {
+        this.originPos.x = val;
+    }
+
+    setOriginPosY(val: number) {
+        this.originPos.y = val;
+    }
+
+    // 相机更新的同时更新背景板
+    setBgPosition(position: Vec3) {
+        this.node.setPosition(position);
+        const y = position.y - 27;
+        this.planeNode.setPosition(position.x, y, -100);
     }
 
     update(deltaTime: number) {
-
+        this.currentPos.set(this.node.getPosition());
+        if (this.originPos.x === this.currentPos.x && this.originPos.y === this.currentPos.y) {
+            return;
+        }
+        if (Math.abs(this.currentPos.x - this.originPos.x) < Constants.CAMERA_MOVE_MINI_ERR) {
+            this.currentPos.x = this.originPos.x;
+            this.setBgPosition(this.currentPos);
+        } else {
+            const x = this.originPos.x - this.currentPos.x;
+            this.currentPos.x += x / Constants.CAMERA_MOVE_X_FRAMES;
+            this.setBgPosition(this.currentPos);
+        }
+        this.currentPos.set(this.node.getPosition());
+        if (Math.abs(this.currentPos.y - this.originPos.y) <= Constants.CAMERA_MOVE_MINI_ERR) {
+            this.currentPos.y = this.originPos.y;
+            this.setBgPosition(this.currentPos);
+        } else {
+            const y = this.originPos.y - this.currentPos.y;
+            this.currentPos.y += y / Constants.CAMERA_MOVE_Y_FRAMES;
+            this.setBgPosition(this.currentPos);
+        }
     }
 }
 

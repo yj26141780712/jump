@@ -37,6 +37,7 @@ export class Board extends Component {
 
     type = Constants.BOARD_TYPE.NORMAL;
     originScale = new Vec3();
+    isActive = false;
 
     onLoad() {
         this.originScale.set(this.node.scale);
@@ -48,6 +49,7 @@ export class Board extends Component {
      * @param pos 跳板位置
      */
     reset(type: number, pos: Vec3) {
+        this.isActive = false;
         this.node.setPosition(pos);
         this.type = type;
         //设置跳板大小
