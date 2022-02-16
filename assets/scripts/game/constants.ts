@@ -111,8 +111,8 @@ export class Constants {
     static BOARD_WAVE_STEP = 0.15 * 15;
 
     static SPRING_HEIGHT = 0.25;
-    static SPRING_HELIX_STEP = 0.2;
-    static SPRING_HELIX_STEP_SPIRNT = 1.2;
+    static SPRING_HELIX_STEP = 0.12;
+    static SPRING_HELIX_STEP_SPIRNT = 0.3;
     static SPRING_TOP_STEP = 0.25;
     static SPRING_TOP_STEP_SPRINT = 0.5;
     static WAVE_OFFSET_Y = 0.13 / 2;
