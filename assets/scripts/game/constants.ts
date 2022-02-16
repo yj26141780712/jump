@@ -104,13 +104,14 @@ export class Constants {
     static BOARD_SCALE_GIANT = 2.8;  // 大跳板缩放比例
     static BOARD_TYPE = BOARD_TYPE;
     static BOARD_RADIUS_CENTER = 0.35; // 跳板圆心半径，小球根据距离圆心远近增加不同分数
+    static BOARD_SPRING_FRAMES = 10;
     static BOARD_WAVE_FRAMES = 16; // 板子波动帧率
     static BOARD_WAVE_INNER_START_FRAMES = 8;
     static BOARD_WAVE_INNER_STEP = 0.12 * 2;
     static BOARD_WAVE_STEP = 0.15 * 15;
 
-    static SPRING_HEIGHT = 0.2;
-    static SPRING_HELIX_STEP = 0.5;
+    static SPRING_HEIGHT = 0.25;
+    static SPRING_HELIX_STEP = 0.2;
     static SPRING_HELIX_STEP_SPIRNT = 1.2;
     static SPRING_TOP_STEP = 0.25;
     static SPRING_TOP_STEP_SPRINT = 0.5;

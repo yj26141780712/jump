@@ -44,7 +44,7 @@ export class Ball extends Component {
     reset() {
         //初始化小球位置
         this.currentPos.set(Constants.BOARD_INIT_POS);
-        this.currentPos.y += Constants.BALL_RADIUS + Constants.BOARD_HEIGTH / 2;
+        this.currentPos.y += Constants.BALL_RADIUS + Constants.BOARD_HEIGTH;
         this.node.setPosition(this.currentPos);
         this.jumpState = Constants.BALL_JUMP_STATE.FALLDOWN;
         this.currJumpFrame = 0;
@@ -149,6 +149,9 @@ export class Ball extends Component {
             }
         }
         this.currentBoard.setWave();
+        if (type == Constants.BOARD_TYPE.SPRING || type == Constants.BOARD_TYPE.SPRINT) {
+            this.currentBoard.setSpring()
+        }
         this.game.Camera.setOriginPosX(pos.x);
         this.game.Camera.setOriginPosY(boardPos.y + Constants.CAMERA_OFFSET_Y);
     }

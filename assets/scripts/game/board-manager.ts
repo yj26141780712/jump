@@ -52,7 +52,7 @@ export class BoardManager extends Component {
         let pos = Constants.BOARD_INIT_POS.clone();
         for (let i = 0; i < Constants.BOARD_NUM; i++) {
             const board = this.boardList[i];
-            board.reset(Constants.BOARD_TYPE.NORMAL, pos);
+            board.reset(Constants.BOARD_TYPE.SPRING, pos);
             pos = this.getNextPos(board);
         }
     }

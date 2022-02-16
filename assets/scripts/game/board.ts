@@ -39,14 +39,21 @@ export class Board extends Component {
     originScale = new Vec3();
     isActive = false;
 
+    // 波动
     waveNode: Node;
     innerWaveNode: Node;
     currWaveFrame: number;
     waveOriginScale = new Vec3();
 
+    // 弹簧
+    springHelixNode: Node;
+    spirngTopNode: Node;
+    currSpringFrame: number;
+
     onLoad() {
         this.originScale.set(this.node.scale);
         this.initWave();
+        this.initSpring();
     }
 
     /**
@@ -76,6 +83,7 @@ export class Board extends Component {
         return this.type === Constants.BOARD_TYPE.GIANT ? Constants.BOARD_SCALE_GIANT * Constants.BOARD_RADIUS : Constants.BOARD_RADIUS;
     }
 
+    //波动
     initWave() {
         this.waveNode = instantiate(this.wavePrefab);
         this.waveNode.active = false;
@@ -87,7 +95,6 @@ export class Board extends Component {
     }
 
     setWave() {
-        console.log('设置波动');
         this.currWaveFrame = 0;
         const pos = this.node.getPosition().clone();
         pos.y += Constants.WAVE_OFFSET_Y;
@@ -107,6 +114,7 @@ export class Board extends Component {
                 if (!this.innerWaveNode.active) {
                     this.innerWaveNode.active = true;
                 }
+
                 const mat2 = this.innerWaveNode.getComponent(MeshRenderer).material;
                 // 初始化时保存以下变量
                 const pass = mat2!.passes[0];
@@ -133,8 +141,62 @@ export class Board extends Component {
         }
     }
 
+    //弹簧
+    initSpring() {
+        this.currSpringFrame = 2 * Constants.BOARD_SPRING_FRAMES;
+        this.springHelixNode = instantiate(this.springHelixPrefab);
+        this.springHelixNode.setScale(1.5, 1, 1.5);
+        this.springHelixNode.active = false;
+        this.node.parent!.addChild(this.springHelixNode);
+        this.spirngTopNode = instantiate(this.springTopPrefab);
+        this.spirngTopNode.active = false;
+        this.node.parent.addChild(this.spirngTopNode);
+        this.setSpringPos();
+    }
+
+    setSpring() {
+        this.currSpringFrame = 0;
+        this.setSpringPos();
+        this.springHelixNode.setScale(1.5, 1, 1.5);
+        this.spirngTopNode.active = true;
+        this.springHelixNode.active = true;
+    }
+
+    setSpringPos() {
+        let pos = this.node.position.clone();
+        pos.y += Constants.BOARD_HEIGTH;
+        this.springHelixNode.setPosition(pos);
+        pos = this.node.position.clone();
+        pos.y += (Constants.BOARD_HEIGTH + Constants.SPRING_HEIGHT);
+        this.spirngTopNode.setPosition(pos);
+    }
+
+    effectSpring() {
+        console.log('弹簧效果！')
+        const z = this.type === Constants.BOARD_TYPE.SPRINT ? Constants.SPRING_HELIX_STEP_SPIRNT : Constants.SPRING_HELIX_STEP;
+        const y = this.type === Constants.BOARD_TYPE.SPRINT ? Constants.SPRING_TOP_STEP_SPRINT : Constants.SPRING_TOP_STEP;
+
+        const scale = this.springHelixNode.getScale().clone(); // 放大
+        console.log(scale);
+        const pos = this.spirngTopNode.position;
+        if (this.currSpringFrame < Constants.BOARD_SPRING_FRAMES) { //弹上去
+            this.springHelixNode.setScale(scale.x, scale.y + z, scale.z);
+            this.spirngTopNode.setPosition(pos.x, pos.y + y, pos.z);
+            this.currSpringFrame++;  //拉下来
+        } else if (this.currSpringFrame >= Constants.BOARD_SPRING_FRAMES && this.currSpringFrame < 2 * Constants.BOARD_SPRING_FRAMES) {
+            this.spirngTopNode.setPosition(pos.x, pos.y - y, pos.z);
+            this.springHelixNode.setScale(scale.x, scale.y - z, scale.z);
+            this.currSpringFrame++;
+        } else {
+            this.springHelixNode.active = false;
+        }
+    }
+
     update(deltaTime: number) {
         this.effectWave();
+        if (this.type === Constants.BOARD_TYPE.SPRING || this.type === Constants.BOARD_TYPE.SPRINT) {
+            this.effectSpring();
+        }
     }
 }
 
