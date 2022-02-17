@@ -82,12 +82,15 @@ export class Ball extends Component {
                     }
                 }
             } else if (this.jumpState === Constants.BALL_JUMP_STATE.SPRINT) { // 冲刺
-                if (this.currJumpFrame >= Constants.BALL_JUMP_FRAMES_SPRING) { // 冲刺状态结束
+                if (this.currJumpFrame >= Constants.BALL_JUMP_FRAMES_SPRINT) { // 冲刺状态结束
                     this.jumpState = Constants.BALL_JUMP_STATE.JUMPUP;
                     this.isJumpSpring = false;
                     this.currJumpFrame = 0;
                     this.hasSprint = false;
                 }
+
+                const y = this.node.position.y + Constants.CAMERA_OFFSET_Y_SPRINT;
+                this,this.game.Camera.setOriginPosY(y);
             } else if (this.jumpState === Constants.BALL_JUMP_STATE.JUMPUP) { // 正常跳跃
                 if (this.isJumpSpring && this.currJumpFrame >= Constants.BALL_JUMP_FRAMES_SPRING) {
                     // 处于跳跃状态并且当前跳跃高度超过弹簧板跳跃高度
@@ -155,6 +158,7 @@ export class Ball extends Component {
                 this.setNewBoard();
             }
         }
+        this.isJumpSpring = type === Constants.BOARD_TYPE.SPRING;
         this.currentBoard.setWave();
         if (type == Constants.BOARD_TYPE.SPRING || type == Constants.BOARD_TYPE.SPRINT) {
             this.currentBoard.setSpring()
@@ -204,7 +208,9 @@ export class Ball extends Component {
         this.currentPos.set(this.node.getPosition());
         if (this.jumpState === Constants.BALL_JUMP_STATE.JUMPUP) {
             if (this.isJumpSpring) {
-
+                console.log(this.currJumpFrame,Constants.BALL_JUMP_STEP_SPRING[Math.floor(this.currJumpFrame)])
+                this.currentPos.y += Constants.BALL_JUMP_STEP_SPRING[Math.floor(this.currJumpFrame/3)]*this.timeScale;
+                console.log(this.currentPos.y);
             } else {
                 this.currentPos.y += Constants.BALL_JUMP_STEP[Math.floor(this.currJumpFrame / 2)] * this.timeScale;
             }
@@ -225,7 +231,8 @@ export class Ball extends Component {
             }
             this.node.setPosition(this.currentPos);
         } else if (this.jumpState === Constants.BALL_JUMP_STATE.SPRINT) {
-
+             this.currentPos.y +=Constants.BALL_JUMP_STEP_SPRINT;
+             this.node.setPosition(this.currentPos);
         }
     }
 }

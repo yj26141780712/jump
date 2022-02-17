@@ -22,22 +22,22 @@
         "gltfIndex": 0
       }
     },
-    "381dd": {
+    "df7df": {
       "importer": "gltf-embeded-image",
-      "uuid": "eb63a17d-58c5-4549-9483-59ee9e290d4e@381dd",
+      "uuid": "eb63a17d-58c5-4549-9483-59ee9e290d4e@df7df",
       "displayName": "",
-      "id": "381dd",
-      "name": "diamond01.jpg.image",
+      "id": "df7df",
+      "name": "贴图 #1.image",
+      "userData": {
+        "gltfIndex": 0
+      },
       "ver": "1.0.3",
       "imported": true,
       "files": [
-        ".jpg",
+        ".png",
         ".json"
       ],
-      "subMetas": {},
-      "userData": {
-        "gltfIndex": 0
-      }
+      "subMetas": {}
     },
     "a96a6": {
       "ver": "1.0.21",
@@ -60,7 +60,7 @@
         "premultiplyAlpha": false,
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "eb63a17d-58c5-4549-9483-59ee9e290d4e@381dd"
+        "imageUuidOrDatabaseUri": "eb63a17d-58c5-4549-9483-59ee9e290d4e@df7df"
       }
     },
     "a66d0": {
@@ -102,8 +102,8 @@
     },
     "imageMetas": [
       {
-        "name": "diamond01.jpg",
-        "uri": "eb63a17d-58c5-4549-9483-59ee9e290d4e@381dd"
+        "name": "贴图 #1",
+        "uri": "eb63a17d-58c5-4549-9483-59ee9e290d4e@df7df"
       }
     ],
     "legacyFbxImporter": true,

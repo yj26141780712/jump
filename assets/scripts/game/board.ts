@@ -73,6 +73,12 @@ export class Board extends Component {
         } else {
             this.node.setScale(this.originScale);
         }
+        this.spirngTopNode.active = false;
+        if (this.type === Constants.BOARD_TYPE.SPRING || this.type === Constants.BOARD_TYPE.SPRINT) {
+            this.springHelixNode.active = true;
+            this.spirngTopNode.active = true;
+            this.setSpringPos();
+        }
     }
 
     getHeight() {
@@ -167,25 +173,22 @@ export class Board extends Component {
         pos.y += Constants.BOARD_HEIGTH;
         this.springHelixNode.setPosition(pos);
         pos = this.node.position.clone();
-        pos.y += (Constants.BOARD_HEIGTH + Constants.SPRING_HEIGHT);
+        pos.y += (Constants.BOARD_HEIGTH + Constants.SPRING_HEIGHT/2);
         this.spirngTopNode.setPosition(pos);
     }
 
     effectSpring() {
-        console.log('弹簧效果！')
-        const z = this.type === Constants.BOARD_TYPE.SPRINT ? Constants.SPRING_HELIX_STEP_SPIRNT : Constants.SPRING_HELIX_STEP;
-        const y = this.type === Constants.BOARD_TYPE.SPRINT ? Constants.SPRING_TOP_STEP_SPRINT : Constants.SPRING_TOP_STEP;
-
+        const y = this.type === Constants.BOARD_TYPE.SPRINT ? Constants.SPRING_HELIX_STEP_SPIRNT : Constants.SPRING_HELIX_STEP;
+        const z = this.type === Constants.BOARD_TYPE.SPRINT ? Constants.SPRING_TOP_STEP_SPRINT : Constants.SPRING_TOP_STEP;
         const scale = this.springHelixNode.getScale().clone(); // 放大
-        console.log(scale);
         const pos = this.spirngTopNode.position;
         if (this.currSpringFrame < Constants.BOARD_SPRING_FRAMES) { //弹上去
-            this.springHelixNode.setScale(scale.x, scale.y + z, scale.z);
-            this.spirngTopNode.setPosition(pos.x, pos.y + y, pos.z);
+            this.spirngTopNode.setPosition(pos.x, pos.y + z, pos.z);
+            this.springHelixNode.setScale(scale.x, scale.y + y, scale.z);
             this.currSpringFrame++;  //拉下来
         } else if (this.currSpringFrame >= Constants.BOARD_SPRING_FRAMES && this.currSpringFrame < 2 * Constants.BOARD_SPRING_FRAMES) {
-            this.spirngTopNode.setPosition(pos.x, pos.y - y, pos.z);
-            this.springHelixNode.setScale(scale.x, scale.y - z, scale.z);
+            this.spirngTopNode.setPosition(pos.x, pos.y - z, pos.z);
+            this.springHelixNode.setScale(scale.x, scale.y - y, scale.z);
             this.currSpringFrame++;
         } else {
             this.springHelixNode.active = false;

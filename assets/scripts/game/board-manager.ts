@@ -2,6 +2,7 @@
 import { _decorator, Component, Node, Prefab, instantiate, Vec3, setDisplayStats } from 'cc';
 import { Board } from './board';
 import { Constants } from './constants';
+import { utils } from './utils';
 const { ccclass, property } = _decorator;
 
 // https://forum.cocos.org/t/3d/86001 wangzhi
@@ -59,7 +60,8 @@ export class BoardManager extends Component {
 
     getNextPos(board: Board) {
         const pos = board.node.getPosition().clone();
-        pos.x = Constants.SCENE_MAX_OFFSET_X * (Math.random() - 0.5);
+        const o = utils.getDiffCoeff(1, 1, 2);
+        pos.x = (Math.random() - .5) * Constants.SCENE_MAX_OFFSET_X * o;
         if (board.type === Constants.BOARD_TYPE.SPRING) {
             pos.y += Constants.BOARD_GAP_SPRING;
         } else if (board.type === Constants.BOARD_TYPE.SPRINT) {
