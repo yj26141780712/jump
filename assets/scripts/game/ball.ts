@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec3 } from 'cc';
+import { _decorator, Component, Node, Vec3, Prefab, instantiate } from 'cc';
 import { Board } from './board';
 import { Constants } from './constants';
 import { Game } from './game';
@@ -22,6 +22,10 @@ const { ccclass, property } = _decorator;
 @ccclass('ball')
 export class Ball extends Component {
 
+
+    @property(Prefab)
+    public trailPrefab: Prefab = null;
+
     jumpState = Constants.BALL_JUMP_STATE.JUMPUP;
     currentPos = new Vec3();
     timeScale = 0;
@@ -35,9 +39,12 @@ export class Ball extends Component {
     diffLevel = 0;
     boardGroupCount = 0;
     hasSprint = false;
+    trailNode: Node | null = null;
 
     start() {
         // [3]
+        this.trailNode = instantiate(this.trailPrefab);
+        this.node.parent.addChild(this.trailNode);
         this.reset();
     }
 

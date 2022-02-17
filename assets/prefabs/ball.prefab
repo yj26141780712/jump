@@ -229,6 +229,10 @@
     "__prefab": {
       "__id__": 10
     },
+    "trailPrefab": {
+      "__uuid__": "050a68f6-f6a0-46ce-a202-39d30e9e49be",
+      "__expectedType__": "cc.Prefab"
+    },
     "_id": ""
   },
   {
