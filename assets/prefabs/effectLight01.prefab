@@ -745,10 +745,10 @@
     },
     "_lrot": {
       "__type__": "cc.Quat",
-      "x": 0.7071067811865475,
+      "x": 0,
       "y": 0,
       "z": 0,
-      "w": 0.7071067811865476
+      "w": 1
     },
     "_lscale": {
       "__type__": "cc.Vec3",
@@ -759,7 +759,7 @@
     "_layer": 1073741824,
     "_euler": {
       "__type__": "cc.Vec3",
-      "x": 90,
+      "x": 0,
       "y": 0,
       "z": 0
     },
@@ -777,6 +777,7 @@
       "__id__": 58
     },
     "_materials": [
+      null,
       {
         "__uuid__": "84cbd56b-7cf8-4dac-af6b-fa765248f7b9",
         "__expectedType__": "cc.Material"
@@ -1321,7 +1322,7 @@
     "_minParticleDistance": 0.1,
     "existWithParticles": true,
     "textureMode": 0,
-    "widthFromParticle": true,
+    "widthFromParticle": false,
     "widthRatio": {
       "__id__": 107
     },
@@ -1346,7 +1347,7 @@
   {
     "__type__": "cc.CurveRange",
     "mode": 0,
-    "constant": 0,
+    "constant": 2,
     "multiplier": 1
   },
   {

@@ -50,6 +50,10 @@ export class Board extends Component {
     spirngTopNode: Node;
     currSpringFrame: number;
 
+    // 碰撞效果
+    currBumpFrame: number;
+
+
     onLoad() {
         this.originScale.set(this.node.scale);
         this.initWave();
@@ -114,6 +118,19 @@ export class Board extends Component {
         this.innerWaveNode.active = true;
     }
 
+    setBump() {
+        this.currBumpFrame = 0;
+    }
+
+    effectBump() {
+        if (this.currBumpFrame < Constants.BOARD_BUMP_FRAMES) {
+            const position = this.node.getPosition().clone();
+            position.y += Constants.BOARD_BUMP_STEP[this.currBumpFrame];
+            this.node.setPosition(position);
+            this.currBumpFrame++;
+        }
+    }
+
     effectWave() {
         if (this.currWaveFrame < Constants.BOARD_WAVE_FRAMES) {
             if (this.currWaveFrame >= Constants.BOARD_WAVE_INNER_START_FRAMES) {
@@ -173,7 +190,7 @@ export class Board extends Component {
         pos.y += Constants.BOARD_HEIGTH;
         this.springHelixNode.setPosition(pos);
         pos = this.node.position.clone();
-        pos.y += (Constants.BOARD_HEIGTH + Constants.SPRING_HEIGHT/2);
+        pos.y += (Constants.BOARD_HEIGTH + Constants.SPRING_HEIGHT / 2);
         this.spirngTopNode.setPosition(pos);
     }
 
@@ -197,6 +214,7 @@ export class Board extends Component {
 
     update(deltaTime: number) {
         this.effectWave();
+        this.effectBump();
         if (this.type === Constants.BOARD_TYPE.SPRING || this.type === Constants.BOARD_TYPE.SPRINT) {
             this.effectSpring();
         }

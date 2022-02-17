@@ -80,6 +80,7 @@ export class Game extends Component {
     startGame() {
         this.state = Constants.GAME_STATE.PLAYING;
         this.uiManager.hide();
+        this.ball.startGame();
     }
 
     endGame() {

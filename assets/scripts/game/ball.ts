@@ -1,5 +1,5 @@
 
-import { _decorator, Component, Node, Vec3, Prefab, instantiate } from 'cc';
+import { _decorator, Component, Node, Vec3, Prefab, instantiate, ParticleUtils, ParticleSystem } from 'cc';
 import { Board } from './board';
 import { Constants } from './constants';
 import { Game } from './game';
@@ -48,6 +48,10 @@ export class Ball extends Component {
         this.reset();
     }
 
+    startGame() {
+        ParticleUtils.play(this.trailNode);
+    }
+
     reset() {
         //初始化小球位置
         this.currentPos.set(Constants.BOARD_INIT_POS);
@@ -69,6 +73,7 @@ export class Ball extends Component {
             this.currJumpFrame += this.timeScale;
             if (this.jumpState === Constants.BALL_JUMP_STATE.FALLDOWN) { // 往下掉
                 if (this.currJumpFrame > Constants.PLAYER_MAX_DOWN_FRAMES || (this.currentBoard.node.position.y - pos.y) - (Constants.BOARD_GAP + Constants.BOARD_HEIGTH) > 0.001) {
+                    ParticleUtils.stop(this.trailNode!);
                     this.game.endGame();
                     return;
                 }
@@ -90,7 +95,7 @@ export class Ball extends Component {
                 }
 
                 const y = this.node.position.y + Constants.CAMERA_OFFSET_Y_SPRINT;
-                this,this.game.Camera.setOriginPosY(y);
+                this, this.game.Camera.setOriginPosY(y);
             } else if (this.jumpState === Constants.BALL_JUMP_STATE.JUMPUP) { // 正常跳跃
                 if (this.isJumpSpring && this.currJumpFrame >= Constants.BALL_JUMP_FRAMES_SPRING) {
                     // 处于跳跃状态并且当前跳跃高度超过弹簧板跳跃高度
@@ -107,6 +112,7 @@ export class Ball extends Component {
             this.setPosY();
             this.setPosX();
             this.game.touchPosX = this.game.movePosX;
+            this.setTrailPos();
         }
     }
 
@@ -160,6 +166,7 @@ export class Ball extends Component {
         }
         this.isJumpSpring = type === Constants.BOARD_TYPE.SPRING;
         this.currentBoard.setWave();
+        this.currentBoard.setBump();
         if (type == Constants.BOARD_TYPE.SPRING || type == Constants.BOARD_TYPE.SPRINT) {
             this.currentBoard.setSpring()
         }
@@ -208,8 +215,8 @@ export class Ball extends Component {
         this.currentPos.set(this.node.getPosition());
         if (this.jumpState === Constants.BALL_JUMP_STATE.JUMPUP) {
             if (this.isJumpSpring) {
-                console.log(this.currJumpFrame,Constants.BALL_JUMP_STEP_SPRING[Math.floor(this.currJumpFrame)])
-                this.currentPos.y += Constants.BALL_JUMP_STEP_SPRING[Math.floor(this.currJumpFrame/3)]*this.timeScale;
+                console.log(this.currJumpFrame, Constants.BALL_JUMP_STEP_SPRING[Math.floor(this.currJumpFrame)])
+                this.currentPos.y += Constants.BALL_JUMP_STEP_SPRING[Math.floor(this.currJumpFrame / 3)] * this.timeScale;
                 console.log(this.currentPos.y);
             } else {
                 this.currentPos.y += Constants.BALL_JUMP_STEP[Math.floor(this.currJumpFrame / 2)] * this.timeScale;
@@ -231,9 +238,14 @@ export class Ball extends Component {
             }
             this.node.setPosition(this.currentPos);
         } else if (this.jumpState === Constants.BALL_JUMP_STATE.SPRINT) {
-             this.currentPos.y +=Constants.BALL_JUMP_STEP_SPRINT;
-             this.node.setPosition(this.currentPos);
+            this.currentPos.y += Constants.BALL_JUMP_STEP_SPRINT;
+            this.node.setPosition(this.currentPos);
         }
+    }
+
+    setTrailPos() {
+        const pos = this.node.getPosition();
+        this.trailNode!.setPosition(pos.x, pos.y - 0.1, pos.z);
     }
 }
 

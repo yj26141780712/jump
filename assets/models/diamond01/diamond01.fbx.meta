@@ -5,6 +5,23 @@
   "uuid": "eb63a17d-58c5-4549-9483-59ee9e290d4e",
   "files": [],
   "subMetas": {
+    "df7df": {
+      "importer": "gltf-embeded-image",
+      "uuid": "eb63a17d-58c5-4549-9483-59ee9e290d4e@df7df",
+      "displayName": "",
+      "id": "df7df",
+      "name": "贴图 #1.image",
+      "userData": {
+        "gltfIndex": 0
+      },
+      "ver": "1.0.3",
+      "imported": true,
+      "files": [
+        ".png",
+        ".json"
+      ],
+      "subMetas": {}
+    },
     "684db": {
       "ver": "1.1.0",
       "importer": "gltf-mesh",
@@ -22,22 +39,22 @@
         "gltfIndex": 0
       }
     },
-    "df7df": {
+    "381dd": {
       "importer": "gltf-embeded-image",
-      "uuid": "eb63a17d-58c5-4549-9483-59ee9e290d4e@df7df",
+      "uuid": "eb63a17d-58c5-4549-9483-59ee9e290d4e@381dd",
       "displayName": "",
-      "id": "df7df",
-      "name": "贴图 #1.image",
-      "userData": {
-        "gltfIndex": 0
-      },
+      "id": "381dd",
+      "name": "diamond01.jpg.image",
       "ver": "1.0.3",
       "imported": true,
       "files": [
-        ".png",
+        ".jpg",
         ".json"
       ],
-      "subMetas": {}
+      "subMetas": {},
+      "userData": {
+        "gltfIndex": 0
+      }
     },
     "a96a6": {
       "ver": "1.0.21",
@@ -60,7 +77,7 @@
         "premultiplyAlpha": false,
         "anisotropy": 0,
         "isUuid": true,
-        "imageUuidOrDatabaseUri": "eb63a17d-58c5-4549-9483-59ee9e290d4e@df7df"
+        "imageUuidOrDatabaseUri": "eb63a17d-58c5-4549-9483-59ee9e290d4e@381dd"
       }
     },
     "a66d0": {
@@ -102,8 +119,8 @@
     },
     "imageMetas": [
       {
-        "name": "贴图 #1",
-        "uri": "eb63a17d-58c5-4549-9483-59ee9e290d4e@df7df"
+        "name": "diamond01.jpg",
+        "uri": "eb63a17d-58c5-4549-9483-59ee9e290d4e@381dd"
       }
     ],
     "legacyFbxImporter": true,
